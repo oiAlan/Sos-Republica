@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MontechIT - Cadastro</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <link href="css/style.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    </head>
+    <body>
+        <h1>Formulário - Cadastro</h1>
+        <div>
+            <form action="." method="GET">
+                <div class="grid-item">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" name="nome" style="width: 500px;">
+                </div>
+                <div class="grid-item">
+                    <label for="datanascimento">Data Nascimento</label>
+                    <input type="text" id="datanascimento" name="data" maxlength="10" style="width: 125px;" oninput="mascaracampos(this, 'data')"><br>
+                    <label for="genero">Gênero</label>
+                    <select id="genero" name="genero">
+                        <option>Feminino</option>
+                        <option>Masculino</option>
+                        <option>Outro</option>
+                    </select>
+                </div>
+                <div class="grid-item">
+                    <label for="nroCPF">CPF</label>
+                    <input type="text" id="nroCPF" name="nroCPF" oninput="mascaracampos(this, 'cpf')"><br>
+                    <label for="nroRG">RG</label>
+                    <input type="text" id="nroRG" name="nroRG"><br>
+                    <label for="orgaoexpeditor">Órgão Expeditor</label>
+                    <select id="orgaoexpeditor" name="orgaoexpeditor"><br>
+                        <option>SSP</option>
+                        <option>SRJ</option>
+                        <option>SPR</option>
+                        <option>SRE</option>
+                        <option>SPE</option>
+                    </select>
+                </div>
+                <div class="grid-item">
+                    <label for="logradouro">Logradouro</label>
+                    <input type="text" id="logradouro" name="logradouro" style="width: 500px;"><br>
+                    <label for="nroendereco">Numero</label>
+                    <input type="text" id="nroendereco" name="nroendereco" style="width: 125px;"><br>
+                    <label for="complemento">Complemento</label>
+                    <input type="text" id="complemento" name="complemento" style="width: 125px;"><br>
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" name="cep" style="width: 125px;" oninput="mascaracampos(this, 'cep')">
+                </div>
+                <div class="grid-item"> 
+                    <label for="bairro">Bairro</label>
+                    <input type="text" id="bairro" name="bairro"><br>
+                    <label for="cidade">Cidade</label>
+                    <input type="text" id="cidade" name="cidade"><br>
+                    <label for="estado">Estado</label>
+                    <input type="text" id="estado" name="estado">
+                </div>
+                <div class="grid-item">
+                    <label for="telefone">Telefone</label>
+                    <input type="text" id="telefone" name="telefone" oninput="mascaracampos(this, 'cep')"><br>
+                    <label for="email">Email</label>
+                    <input type="text" id="email" name="email"><br>
+                    <label for="usuario">Usuário</label>
+                    <input type="text" id="usuario" name="usuario"><br>
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha">
+                </div>
+                <div>
+                    <input type="button" id="btnenviar" value="Enviar"><br>
+                </div>
+            </form>
+        </div>
+        <!--Biblioteca jQuery-->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous">
+        </script>
+        <!--Código JavaScript-->
+        <script language="JavaScript" type="text/javascript">
+            function mascaracampos(x,y){
+                var idCampo = x.value;
+                if(isNaN(idCampo[idCampo.length-1])){
+                    x.value = idCampo.substring(0, idCampo.length-1);
+                    return;
+                }
+
+                if(y == "data"){
+                    x.setAttribute("maxlength", "10");
+                    if(idCampo.length == 2 || idCampo.length == 5) x.value += "/";
+                }
+
+                if(y == "cpf"){
+                    x.setAttribute("maxlength", "14");
+                    if(idCampo.length == 3 || idCampo.length == 7) x.value += ".";
+                    if(idCampo.length == 11) x.value += "-";
+                }
+
+                if(y == "cep"){
+                    x.setAttribute("maxlength", "9");
+                    if(idCampo.length == 5) x.value += "-";
+                }
+
+                if(y == "tel"){
+                    if(idCampo[0] == 9){
+                        x.setAttribute("maxlength", "10");
+                        if(idCampo.length == 5) x.value += "-";
+                    }else{
+                        x.setAttribute("maxlength", "9");
+                        if(idCampo.length == 4) x.value += "-";
+                    }
+                }
+            }
+
+            $(document).ready(function(){
+                $("#cep").blur(function(){
+                    var value = $(this).val().replace(/\D/g, '');
+
+                    if(value != ""){
+                        var cepvalidacao = /^[0-9]{8}$/;
+                        
+
+                        if(cepvalidacao.test(value)){
+                            $("#logradouro").val("...");
+                            $("#bairro").val("...");
+                            $("#cidade").val("...");
+                            $("#estado").val("...");
+
+                            $.getJSON("https://viacep.com.br/ws/"+ value +"/json/?callback=?", function(dados){
+                                if(!("error" in dados)){
+                                    $("#logradouro").val(dados.logradouro);
+                                    $("#bairro").val(dados.bairro);
+                                    $("#cidade").val(dados.localidade);
+                                    $("#estado").val(dados.uf);
+                                }else{
+                                    alert("O CEP digitado não foi encontrado!");
+                                }
+                            });
+                        }
+                        else{
+                            alert("Formato de CEP inválido!");
+                        }
+                    }
+                });
+            });
+        </script>  
+    </body>
+</html>

@@ -1,0 +1,41 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+  font-family: 'Poppins', sans-serif;
+
+}
+
+h1{
+  text-align: center;
+}
+
+div{
+  display: grid;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.grid-item label{
+  font-size: 14px;
+  color: #a9a9a9;
+  margin-right: 10px;
+}
+
+.grid-item input{
+  border-style: solid 10px;
+  border-radius: 3px;
+  height: 25px;
+  margin-right: 10px;
+}
+
+.grid-item select{
+  border-style: solid 10px;
+  border-radius: 3px;
+  height: 25px;
+  margin-right: 10px;
+}
+
+.grid-item 
